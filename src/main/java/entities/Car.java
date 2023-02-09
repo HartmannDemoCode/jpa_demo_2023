@@ -6,6 +6,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "car")
+@NamedQueries({
+        @NamedQuery(name = "Car.deleteAllRows", query = "delete from Car c")
+})
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,5 +43,14 @@ public class Car {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "brand = " + brand + ", " +
+                "make = " + make + ", " +
+                "year = " + year + ")";
     }
 }

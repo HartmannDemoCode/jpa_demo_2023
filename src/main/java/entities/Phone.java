@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "phone")
+@NamedQueries({
+        @NamedQuery(name = "Phone.deleteAllRows", query = "delete from Phone p")
+})
 public class Phone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +20,7 @@ public class Phone {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", unique = true)
+    @JoinColumn(name = "person_id")
     private Person person;
 
     public Phone(String number, String description) {

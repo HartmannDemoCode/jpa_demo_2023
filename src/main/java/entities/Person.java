@@ -3,6 +3,7 @@ package entities;
 import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +14,8 @@ import java.util.Set;
 @Entity
 @Table(name = "person")
 @NamedQueries({
-        @NamedQuery(name = "Person.deleteById", query = "delete from Person p where p.id = :id")
+        @NamedQuery(name = "Person.deleteById", query = "delete from Person p where p.id = :id"),
+        @NamedQuery(name = "Person.deleteAllRows", query = "delete from Person p")
 })
 public class Person {
     @Id
@@ -51,6 +53,17 @@ public class Person {
     @Column(name = "modified")
     private LocalDateTime editted;
 
+    @Column(name = "salary")
+    private Double salary;
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
+
     // Database is not set to handle dates, so I do it with JPA lifecycle methods. For more see: https://www.baeldung.com/jpa-entity-lifecycle-events
     @PreUpdate
     public void onUpdate() {
@@ -71,6 +84,12 @@ public class Person {
         this.name = name;
         setBirthDate(birthDate);
         setAge();
+    }
+    public Person(String name, String birthDate, Double salary) {
+        this.name = name;
+        setBirthDate(birthDate);
+        setAge();
+        this.salary = salary;
     }
 
     public Set<String> getAddresses() {
@@ -144,9 +163,9 @@ public class Person {
     }
 
     public void setBirthDate(String birthDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime bd = LocalDateTime.parse(birthDate, formatter);
-        this.birthDate = bd;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate bd = LocalDate.parse(birthDate, formatter);
+        this.birthDate = bd.atStartOfDay();
     }
 
     @Override
