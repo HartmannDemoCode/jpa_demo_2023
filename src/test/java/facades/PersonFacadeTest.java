@@ -51,9 +51,9 @@ class PersonFacadeTest {
         try {
 
             em.getTransaction().begin();
+            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
             em.createNamedQuery("Car.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Phone.deleteAllRows").executeUpdate();
             em.persist(car1);
             em.persist(car2);
             em.persist(person1);
